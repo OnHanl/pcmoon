@@ -1,0 +1,466 @@
+[
+{
+    "model": "auth.user",
+    "pk": 1,
+    "fields": {
+        "password": "pbkdf2_sha256$1200000$OG0qtBK4gOSbTIK3E1M0Ae$yCFZ6GWtl+oqjKaw0KlIZd5SduagtNkY7zI9KbVgDTE=",
+        "last_login": "2026-07-12T19:57:07.144Z",
+        "is_superuser": true,
+        "username": "admin",
+        "first_name": "",
+        "last_name": "",
+        "email": "admin@example.com",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2026-07-11T15:25:52.090Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "194x9tmfs17kk5wf7n9cc70tq6yndwof",
+    "fields": {
+        "session_data": ".eJxVjLsOAiEQAP-F2pB7AAuW9n4DWZZFTg0kx11l_HcluULbmcm8hMd9y35vvPolirMYxemXBaQHly7iHcutSqplW5cgeyIP2-S1Rn5ejvZvkLHlvqXkJjIOdJpcmpkCaETlAMMMBMkOCYIaldYcLX9TpoQwQIhgLJoo3h_5cTi0:1wj0Ct:hVBt3l7HHZSrk1EA9Oj3duKoYP8fzMBvM018VyHQg88",
+        "expire_date": "2026-07-26T19:51:19.624Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "26ky9lgsp1qmmbt0u0h2hz4nep410vb2",
+    "fields": {
+        "session_data": ".eJxVjLsOAiEQAP-F2pB7AAuW9n4DWZZFTg0kx11l_HcluULbmcm8hMd9y35vvPolirMYxemXBaQHly7iHcutSqplW5cgeyIP2-S1Rn5ejvZvkLHlvqXkJjIOdJpcmpkCaETlAMMMBMkOCYIaldYcLX9TpoQwQIhgLJoo3h_5cTi0:1wiwZk:3awO5gvBr5rMK9VW7ynh69-rQc8GL2CxJV3CI2nmm8Y",
+        "expire_date": "2026-07-26T15:58:40.044Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "42jy9ay93ac4hjdlf2cgmwl13qqg27mw",
+    "fields": {
+        "session_data": ".eJxVjLsOAiEQAP-F2pB7AAuW9n4DWZZFTg0kx11l_HcluULbmcm8hMd9y35vvPolirMYxemXBaQHly7iHcutSqplW5cgeyIP2-S1Rn5ejvZvkLHlvqXkJjIOdJpcmpkCaETlAMMMBMkOCYIaldYcLX9TpoQwQIhgLJoo3h_5cTi0:1wivYp:EfRoyDGjrCT5T1rj8i5SWVhTBBqW5bDwNtXREdEJgR8",
+        "expire_date": "2026-07-26T14:53:39.908Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "a6g9jhfpf3qakhj5c5mrxrse29m0mahl",
+    "fields": {
+        "session_data": ".eJxVjLsOAiEQAP-F2pB7AAuW9n4DWZZFTg0kx11l_HcluULbmcm8hMd9y35vvPolirMYxemXBaQHly7iHcutSqplW5cgeyIP2-S1Rn5ejvZvkLHlvqXkJjIOdJpcmpkCaETlAMMMBMkOCYIaldYcLX9TpoQwQIhgLJoo3h_5cTi0:1wivZ7:94CzTYgtphSLjzSff2z-ocU-93rfDZM8zaSMKbzD3Uo",
+        "expire_date": "2026-07-26T14:53:57.212Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "ac3zhu6fj3h7b1io8jg25noxfi0tslze",
+    "fields": {
+        "session_data": ".eJxVjLsOAiEQAP-F2pB7AAuW9n4DWZZFTg0kx11l_HcluULbmcm8hMd9y35vvPolirMYxemXBaQHly7iHcutSqplW5cgeyIP2-S1Rn5ejvZvkLHlvqXkJjIOdJpcmpkCaETlAMMMBMkOCYIaldYcLX9TpoQwQIhgLJoo3h_5cTi0:1wj0IV:zm9SX9JLrRIFLGcqaRAJGywGRrvKNXkZdrjW8KChkvg",
+        "expire_date": "2026-07-26T19:57:07.151Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "gcs40pmix15hipr7frj6299ns7u9o9of",
+    "fields": {
+        "session_data": ".eJxVjLsOAiEQAP-F2pB7AAuW9n4DWZZFTg0kx11l_HcluULbmcm8hMd9y35vvPolirMYxemXBaQHly7iHcutSqplW5cgeyIP2-S1Rn5ejvZvkLHlvqXkJjIOdJpcmpkCaETlAMMMBMkOCYIaldYcLX9TpoQwQIhgLJoo3h_5cTi0:1wiwZD:OQ1tIEvLJlllgcYZkXPfk5YRH5-DUIBGWwP9TxVwfpY",
+        "expire_date": "2026-07-26T15:58:07.561Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "qiay4imxa7b9e0uutw2u2h6j1dsapzcs",
+    "fields": {
+        "session_data": ".eJxVjLsOAiEQAP-F2pB7AAuW9n4DWZZFTg0kx11l_HcluULbmcm8hMd9y35vvPolirMYxemXBaQHly7iHcutSqplW5cgeyIP2-S1Rn5ejvZvkLHlvqXkJjIOdJpcmpkCaETlAMMMBMkOCYIaldYcLX9TpoQwQIhgLJoo3h_5cTi0:1wiwZP:VUcU8Q6HyqsB57oijAcV1Kjfy5pJF7dDGDUgTQGOLkc",
+        "expire_date": "2026-07-26T15:58:19.655Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "r1nnopa46css76j7n42w6yl29kxait78",
+    "fields": {
+        "session_data": ".eJxVjLsOAiEQAP-F2pB7AAuW9n4DWZZFTg0kx11l_HcluULbmcm8hMd9y35vvPolirMYxemXBaQHly7iHcutSqplW5cgeyIP2-S1Rn5ejvZvkLHlvqXkJjIOdJpcmpkCaETlAMMMBMkOCYIaldYcLX9TpoQwQIhgLJoo3h_5cTi0:1wiemt:C_6eX3yT2aWT0YEJW8Hm2xpSBvkrmL6Hk9bigRiDEm0",
+        "expire_date": "2026-07-25T20:59:03.900Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "yk4zq9jdqem0nydl7ynb609txf4vjpr9",
+    "fields": {
+        "session_data": ".eJxVjLsOAiEQAP-F2pB7AAuW9n4DWZZFTg0kx11l_HcluULbmcm8hMd9y35vvPolirMYxemXBaQHly7iHcutSqplW5cgeyIP2-S1Rn5ejvZvkLHlvqXkJjIOdJpcmpkCaETlAMMMBMkOCYIaldYcLX9TpoQwQIhgLJoo3h_5cTi0:1wienB:kQyeT9n_rbtVw3uBvVPvk52XKwLIwtVVLzuD7nz9ic8",
+        "expire_date": "2026-07-25T20:59:21.220Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "zulhg7ziek0j2plvb93hwp8vjxk515f7",
+    "fields": {
+        "session_data": ".eJxVjLsOAiEQAP-F2pB7AAuW9n4DWZZFTg0kx11l_HcluULbmcm8hMd9y35vvPolirMYxemXBaQHly7iHcutSqplW5cgeyIP2-S1Rn5ejvZvkLHlvqXkJjIOdJpcmpkCaETlAMMMBMkOCYIaldYcLX9TpoQwQIhgLJoo3h_5cTi0:1wiwa4:9Yin4hB3r7LompLE7bZlGfokC42cji1nSX_xh42xmKU",
+        "expire_date": "2026-07-26T15:59:00.494Z"
+    }
+},
+{
+    "model": "orders.servicecategory",
+    "pk": 1,
+    "fields": {
+        "name": "Сборка ПК",
+        "order": 1
+    }
+},
+{
+    "model": "orders.servicecategory",
+    "pk": 2,
+    "fields": {
+        "name": "Диагностика и ремонт",
+        "order": 2
+    }
+},
+{
+    "model": "orders.servicecategory",
+    "pk": 3,
+    "fields": {
+        "name": "Обслуживание и дополнительные услуги",
+        "order": 3
+    }
+},
+{
+    "model": "orders.service",
+    "pk": 1,
+    "fields": {
+        "category": 1,
+        "name": "Сборка ПК из комплектующих клиента",
+        "description": "тесты, кабель-менеджмент, чистая установка ОС(в стоимость уже включена улсуга подробора конфигурации)",
+        "price": "99.00",
+        "price_from": false,
+        "is_active": true,
+        "order": 1
+    }
+},
+{
+    "model": "orders.service",
+    "pk": 2,
+    "fields": {
+        "category": 1,
+        "name": "Подбор конфигурации под задачи",
+        "description": "игры, монтаж, работа — под бюджет",
+        "price": "15.00",
+        "price_from": false,
+        "is_active": true,
+        "order": 0
+    }
+},
+{
+    "model": "orders.service",
+    "pk": 3,
+    "fields": {
+        "category": 2,
+        "name": "Диагностика(при отказе от ремонта)",
+        "description": "диагностирую устройство, выявляю возможные причины неисправности(включена в стоимость ремонта при согласии на сам ремонт)",
+        "price": "20.00",
+        "price_from": false,
+        "is_active": true,
+        "order": 0
+    }
+},
+{
+    "model": "orders.service",
+    "pk": 5,
+    "fields": {
+        "category": 2,
+        "name": "Ремонт / замена блока питания",
+        "description": "",
+        "price": "30.00",
+        "price_from": true,
+        "is_active": false,
+        "order": 0
+    }
+},
+{
+    "model": "orders.service",
+    "pk": 6,
+    "fields": {
+        "category": 2,
+        "name": "Восстановление данных с HDD/SSD",
+        "description": "не гарантируется в 100% случаев",
+        "price": "60.00",
+        "price_from": true,
+        "is_active": true,
+        "order": 0
+    }
+},
+{
+    "model": "orders.service",
+    "pk": 7,
+    "fields": {
+        "category": 3,
+        "name": "Установка Windows + драйверы",
+        "description": "",
+        "price": "35.00",
+        "price_from": false,
+        "is_active": true,
+        "order": 0
+    }
+},
+{
+    "model": "orders.service",
+    "pk": 8,
+    "fields": {
+        "category": 3,
+        "name": "Установка/замена комплектующих (RAM/SSD/HDD/GPU)",
+        "description": "подходит как для ноутбуков так и для компьютеров",
+        "price": "20.00",
+        "price_from": false,
+        "is_active": true,
+        "order": 0
+    }
+},
+{
+    "model": "orders.service",
+    "pk": 11,
+    "fields": {
+        "category": 2,
+        "name": "Ремонт или замена системы охлаждения",
+        "description": "",
+        "price": "55.00",
+        "price_from": true,
+        "is_active": true,
+        "order": 0
+    }
+},
+{
+    "model": "orders.service",
+    "pk": 12,
+    "fields": {
+        "category": 2,
+        "name": "Замена разъёма питания ноутбука",
+        "description": "",
+        "price": "50.00",
+        "price_from": true,
+        "is_active": true,
+        "order": 0
+    }
+},
+{
+    "model": "orders.service",
+    "pk": 13,
+    "fields": {
+        "category": 2,
+        "name": "Замена USB-разъёма ноутбука",
+        "description": "",
+        "price": "45.00",
+        "price_from": true,
+        "is_active": true,
+        "order": 0
+    }
+},
+{
+    "model": "orders.service",
+    "pk": 14,
+    "fields": {
+        "category": 3,
+        "name": "Замена термопасты + чистка от пыли",
+        "description": "Цена услуг по отдельности 20 BYN",
+        "price": "35.00",
+        "price_from": false,
+        "is_active": true,
+        "order": 0
+    }
+},
+{
+    "model": "orders.service",
+    "pk": 15,
+    "fields": {
+        "category": 3,
+        "name": "Перепрошивка BIOS",
+        "description": "",
+        "price": "50.00",
+        "price_from": false,
+        "is_active": true,
+        "order": 0
+    }
+},
+{
+    "model": "orders.service",
+    "pk": 17,
+    "fields": {
+        "category": 3,
+        "name": "Снятие пароля учётной записи Windows",
+        "description": "",
+        "price": "35.00",
+        "price_from": false,
+        "is_active": true,
+        "order": 0
+    }
+},
+{
+    "model": "orders.service",
+    "pk": 18,
+    "fields": {
+        "category": 3,
+        "name": "Снятие пароля BIOS ноутбука",
+        "description": "",
+        "price": "50.00",
+        "price_from": false,
+        "is_active": true,
+        "order": 0
+    }
+},
+{
+    "model": "orders.portfolioitem",
+    "pk": 1,
+    "fields": {
+        "title": "Игровой ПК на Ryzen 5 7600 + RTX 4060",
+        "description": "Профессиональный монтаж комплектующих, аккуратный кабель-менеджмент, настройка BIOS и установка необходимого ПО. Обязательное тестирование стабильности системы и температур в стресс-тестах. Помощь в подборе оптимального «железа» под ваш бюджет",
+        "before_image": "",
+        "image": "portfolio/photo_2026-07-12_19-23-16_ztHqKZQ.jpg",
+        "tags": "1440p / игры, Сборка ПК",
+        "date_done": "2026-07-01",
+        "is_published": true,
+        "order": 0
+    }
+},
+{
+    "model": "orders.portfolioitem",
+    "pk": 2,
+    "fields": {
+        "title": "Сборка ПК",
+        "description": "Выполнена полная сборка системного блока из комплектующих заказчика. Проведена проверка совместимости, аккуратная укладка кабелей и настройка воздушных потоков для оптимального охлаждения.",
+        "before_image": "portfolio/before/photo_2026-07-12_19-40-35.jpg",
+        "image": "portfolio/photo_2026-07-12_19-40-22.jpg",
+        "tags": "Сборка ПК, установка ОС и драйверов",
+        "date_done": "2026-06-11",
+        "is_published": true,
+        "order": 0
+    }
+},
+{
+    "model": "orders.portfolioitem",
+    "pk": 3,
+    "fields": {
+        "title": "Очистка системника",
+        "description": "Выполнена полная очистка радиатора и вентиляторов от пыли. Устранена причина перегрева и повышенного шума при работе. Температура процессора в стресс-тестах вернулась к заводским показателям.",
+        "before_image": "portfolio/before/photo_2025-12-29_21-05-55.jpg",
+        "image": "portfolio/photo_2025-12-29_21-05-56.jpg",
+        "tags": "Очистка",
+        "date_done": "2026-05-17",
+        "is_published": true,
+        "order": 0
+    }
+},
+{
+    "model": "orders.review",
+    "pk": 1,
+    "fields": {
+        "client_name": "Дмитрий",
+        "text": "Приятно иметь дело с профессионалом. Настраивали систему и софт после покупки нового ПК. Всё четко, без лишних «накруток» и навязывания ненужных услуг. Всё прозрачно и надежно. Цена адекватная, качеством довольна на все 100%.",
+        "rating": 5,
+        "service_label": "Настройка",
+        "is_verified": true,
+        "created_at": "2025-01-16",
+        "is_published": true
+    }
+},
+{
+    "model": "orders.review",
+    "pk": 2,
+    "fields": {
+        "client_name": "Анна",
+        "text": "Ноутбук начал сильно греться и шуметь, обратился за чисткой и заменой термопасты. Мастер приехал на дом в удобное для меня время, всё сделал быстро и при мне. После обслуживания ноут работает тише, чем после покупки. Очень удобно, что не пришлось никуда везти технику и ждать неделю. Качественный сервис прямо в Гродно, буду обращаться еще!",
+        "rating": 5,
+        "service_label": "Обслуживание ноутбука",
+        "is_verified": true,
+        "created_at": "2026-04-10",
+        "is_published": true
+    }
+},
+{
+    "model": "orders.review",
+    "pk": 3,
+    "fields": {
+        "client_name": "Игорь",
+        "text": "Заказывал сборку игрового ПК. Мастер не просто собрал «железо», а помог грамотно подобрать комплектующие под мой бюджет, чтобы ничего не переплачивать. Сделано всё очень аккуратно, кабель-менеджмент идеальный, внутри системника полный порядок. Комп летает, температуры в стресс-тестах отличные. Видно, что человек реально разбирается в теме. Рекомендую!",
+        "rating": 5,
+        "service_label": "Сборка ПК",
+        "is_verified": true,
+        "created_at": "2026-02-12",
+        "is_published": true
+    }
+},
+{
+    "model": "orders.order",
+    "pk": 8,
+    "fields": {
+        "name": "Вадим",
+        "phone": "+375333959136",
+        "email": "",
+        "service": 6,
+        "comment": "",
+        "status": "new",
+        "priority": "medium",
+        "manager_comment": "",
+        "estimated_price": null,
+        "created_at": "2026-07-14T22:12:12.586Z",
+        "updated_at": "2026-07-14T22:13:04.628Z"
+    }
+},
+{
+    "model": "orders.contact",
+    "pk": 1,
+    "fields": {
+        "phone": "+375 33 310-07-12",
+        "telegram": "@LaDirector",
+        "whatsapp": "",
+        "email": "pcmoonservice@gmail.com",
+        "address": "Гродно, работа на выезде",
+        "work_hours": "Пн–Сб, 10:00–20:00"
+    }
+},
+{
+    "model": "orders.faqitem",
+    "pk": 1,
+    "fields": {
+        "question": "Сколько стоит диагностика и входит ли она в цену ремонта?",
+        "answer": "Диагностика — 15€. Если после неё вы соглашаетесь на ремонт у меня, эта сумма вычитается из итоговой стоимости.",
+        "order": 0,
+        "is_published": true
+    }
+},
+{
+    "model": "orders.faqitem",
+    "pk": 2,
+    "fields": {
+        "question": "Что с моими личными данными на диске?",
+        "answer": "Не открываю личные файлы без необходимости. Если для ремонта нужно временно снять накопитель, он не покидает мастерскую отдельно от системного блока.",
+        "order": 1,
+        "is_published": true
+    }
+},
+{
+    "model": "orders.faqitem",
+    "pk": 3,
+    "fields": {
+        "question": "Даёте ли гарантию на ремонт и сборку?",
+        "answer": "Да, гарантия на выполненные работы — до 12 месяцев. На комплектующие действует гарантия производителя/магазина.",
+        "order": 2,
+        "is_published": true
+    }
+},
+{
+    "model": "orders.faqitem",
+    "pk": 4,
+    "fields": {
+        "question": "Можно ли привезти ПК не в Гродно?",
+        "answer": "Возможен выезд по договорённости — уточните адрес в заявке, скажу, действует ли выезд в вашем случае.",
+        "order": 3,
+        "is_published": true
+    }
+},
+{
+    "model": "orders.faqitem",
+    "pk": 5,
+    "fields": {
+        "question": "Сколько по времени занимает сборка/ремонт?",
+        "answer": "Простая сборка — обычно 1 день. Ремонт зависит от диагноза и наличия запчастей — называю срок сразу после диагностики.",
+        "order": 4,
+        "is_published": true
+    }
+}
+]

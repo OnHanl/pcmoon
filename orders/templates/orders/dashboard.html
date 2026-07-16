@@ -1,0 +1,261 @@
+{% extends "orders/crm_base.html" %}
+{% block title %}Заявки{% endblock %}
+
+{% block extra_style %}
+.board-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+.board{display:grid;grid-auto-flow:column;grid-auto-columns:280px;gap:16px;overflow-x:auto;padding-bottom:12px;align-items:start;}
+.col{background:var(--surface);border:1px solid var(--border-soft);border-radius:var(--radius);display:flex;flex-direction:column;max-height:calc(100vh - 260px);}
+.col-head{display:flex;align-items:center;gap:8px;padding:14px 14px 12px;border-bottom:1px solid var(--border-soft);}
+.col-dot{width:8px;height:8px;border-radius:50%;}
+.col-head h3{font-size:13px;font-weight:600;flex:1;}
+.col-count{font-family:var(--font-mono);font-size:11.5px;color:var(--muted-2);background:var(--surface-2);padding:2px 8px;border-radius:10px;}
+.col-body{padding:12px;display:flex;flex-direction:column;gap:10px;overflow-y:auto;flex:1;min-height:80px;}
+.col-body.drag-over{background:var(--accent-soft);border-radius:8px;}
+.card{background:var(--surface-2);border:1px solid var(--border-soft);border-radius:var(--radius-sm);padding:13px 14px;cursor:grab;transition:border-color .12s, transform .12s;}
+.card:hover{border-color:var(--accent);}
+.card.dragging{opacity:.4;}
+.card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:8px;}
+.card-name{font-weight:600;font-size:13.5px;}
+.card-id{font-family:var(--font-mono);font-size:10.5px;color:var(--muted-2);}
+.card-service{font-size:12px;color:var(--muted);margin-bottom:10px;}
+.card-meta{display:flex;justify-content:space-between;align-items:center;font-size:11.5px;color:var(--muted-2);}
+.card-phone{font-family:var(--font-mono);}
+.card-time{display:flex;align-items:center;gap:4px;}
+.priority-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.p-high{background:var(--danger);}
+.p-medium{background:var(--accent);}
+.p-low{background:var(--muted-2);}
+.overlay{position:fixed;inset:0;background:rgba(10,11,14,.6);backdrop-filter:blur(3px);display:none;align-items:center;justify-content:center;z-index:100;padding:20px;}
+.overlay.show{display:flex;}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);width:100%;max-width:560px;max-height:88vh;overflow-y:auto;box-shadow:0 30px 80px -20px rgba(0,0,0,.6);}
+.modal-head{display:flex;justify-content:space-between;align-items:flex-start;padding:22px 24px;border-bottom:1px solid var(--border-soft);}
+.modal-head h2{font-size:19px;}
+.modal-close{background:none;border:0;color:var(--muted);font-size:20px;cursor:pointer;}
+.modal-body{padding:22px 24px;}
+.status-select{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:20px;}
+.status-pill{padding:6px 12px;border-radius:16px;font-size:12px;font-family:var(--font-mono);border:1px solid var(--border);color:var(--muted);cursor:pointer;background:none;}
+.status-pill.active{border-color:transparent;color:#111318;font-weight:600;}
+.detail-row{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--border-soft);font-size:13.5px;}
+.detail-row .k{width:120px;color:var(--muted-2);flex-shrink:0;}
+.calllog{margin-top:18px;}
+.calllog h4{font-size:12.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted-2);font-family:var(--font-mono);margin-bottom:10px;}
+.calllog-item{background:var(--surface-2);border:1px solid var(--border-soft);border-radius:8px;padding:12px 14px;margin-bottom:8px;font-size:13px;}
+.calllog-item .date{color:var(--muted-2);font-family:var(--font-mono);font-size:11px;margin-bottom:5px;}
+.calllog-add{display:flex;gap:8px;margin-top:10px;}
+.calllog-add input{flex:1;background:var(--surface-2);border:1px solid var(--border);color:var(--text);padding:9px 12px;border-radius:7px;font-size:13px;}
+.calllog-add button{padding:9px 14px;border-radius:7px;border:none;background:var(--accent);color:#111318;font-weight:600;cursor:pointer;font-size:13px;}
+{% endblock %}
+
+{% block topbar %}
+<div class="topbar">
+  <h1>Заявки</h1>
+  <div class="search-box"><span class="ico">🔍</span><input type="text" id="searchInput" placeholder="Поиск по имени или телефону"></div>
+  <a href="/admin/orders/order/add/" class="btn btn-accent">+ Новая заявка</a>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="stats" id="statsRow">
+  <div class="stat-card">
+    <div class="stat-top"><div class="stat-icon" style="background:var(--accent-soft);color:var(--accent);">📥</div></div>
+    <div class="stat-value" id="statNewToday">—</div><div class="stat-label">Новых заявок сегодня</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-top"><div class="stat-icon" style="background:var(--blue-soft);color:var(--blue);">🔧</div></div>
+    <div class="stat-value" id="statInProgress">—</div><div class="stat-label">В работе</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-top"><div class="stat-icon" style="background:var(--success-soft);color:var(--success);">BYN</div></div>
+    <div class="stat-value" id="statRevenue">—</div><div class="stat-label">Выручка за месяц (завершённые)</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-top"><div class="stat-icon" style="background:var(--purple-soft);color:var(--purple);">📋</div></div>
+    <div class="stat-value" id="statActive">—</div><div class="stat-label">Активных заявок всего</div>
+  </div>
+</div>
+
+<div class="board-head">
+  <h3 style="font-size:15px;">Kanban-доска</h3>
+  <span style="color:var(--muted-2);font-size:12.5px;">Перетаскивайте карточки между колонками, чтобы менять статус</span>
+</div>
+
+<div class="board" id="board"></div>
+
+<div class="overlay" id="overlay">
+  <div class="modal" id="modal"></div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+const CSRF_TOKEN = "{{ csrf_token }}";
+let STATUSES = [];
+let orders = [];
+
+async function apiFetch(url, options={}){
+  options.headers = Object.assign({
+    "Content-Type": "application/json",
+    "X-CSRFToken": CSRF_TOKEN,
+  }, options.headers || {});
+  const res = await fetch(url, options);
+  if (!res.ok) throw new Error("Request failed: " + res.status);
+  return res.json();
+}
+
+async function loadOrders(){
+  const data = await apiFetch("{% url 'orders:api_orders' %}");
+  STATUSES = data.statuses;
+  orders = data.orders;
+  renderStats(data.stats, data.orders);
+  renderBoard(document.getElementById('searchInput').value);
+}
+
+function renderStats(stats, allOrders){
+  document.getElementById('statNewToday').textContent = stats.new_today;
+  document.getElementById('statInProgress').textContent = stats.in_progress;
+  document.getElementById('statRevenue').textContent = Math.round(stats.revenue_month) + ' BYN';
+  document.getElementById('statActive').textContent = stats.active_total;
+}
+
+function renderBoard(filter=''){
+  const board = document.getElementById('board');
+  board.innerHTML = '';
+  STATUSES.forEach(st=>{
+    const items = orders.filter(o => o.status===st.key && matchesFilter(o, filter));
+    const col = document.createElement('div');
+    col.className = 'col';
+    col.innerHTML = `
+      <div class="col-head">
+        <span class="col-dot" style="background:${st.color}"></span>
+        <h3>${st.label}</h3>
+        <span class="col-count">${items.length}</span>
+      </div>
+      <div class="col-body" data-status="${st.key}"></div>
+    `;
+    const body = col.querySelector('.col-body');
+    if (items.length === 0) {
+      body.innerHTML = '<div class="empty-hint">пусто</div>';
+    }
+    items.forEach(o => body.appendChild(renderCard(o)));
+    body.addEventListener('dragover', e=>{ e.preventDefault(); body.classList.add('drag-over'); });
+    body.addEventListener('dragleave', ()=> body.classList.remove('drag-over'));
+    body.addEventListener('drop', async e=>{
+      e.preventDefault();
+      body.classList.remove('drag-over');
+      const id = parseInt(e.dataTransfer.getData('text/plain'));
+      const order = orders.find(o=>o.id===id);
+      if(order && order.status !== st.key){
+        order.status = st.key;
+        renderBoard(document.getElementById('searchInput').value);
+        try {
+          await apiFetch(`/api/orders/${id}/status/`, {
+            method: 'POST', body: JSON.stringify({status: st.key})
+          });
+        } catch(err) { console.error(err); }
+      }
+    });
+    board.appendChild(col);
+  });
+}
+
+function matchesFilter(o, filter){
+  if(!filter) return true;
+  const f = filter.toLowerCase();
+  return o.name.toLowerCase().includes(f) || o.phone.includes(f) || (o.service||'').toLowerCase().includes(f);
+}
+
+function renderCard(o){
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.draggable = true;
+  card.innerHTML = `
+    <div class="card-top">
+      <span class="card-name">${o.name}</span>
+      <span class="card-id">#${o.id}</span>
+    </div>
+    <div class="card-service">${o.service}</div>
+    <div class="card-meta">
+      <span class="card-phone">${o.phone}</span>
+      <span class="card-time"><span class="priority-dot p-${o.priority}"></span>${o.time}</span>
+    </div>
+  `;
+  card.addEventListener('dragstart', e=>{
+    card.classList.add('dragging');
+    e.dataTransfer.setData('text/plain', o.id);
+  });
+  card.addEventListener('dragend', ()=> card.classList.remove('dragging'));
+  card.addEventListener('click', ()=>{ if(!card.classList.contains('dragging')) openModal(o.id); });
+  return card;
+}
+
+function openModal(id){
+  const o = orders.find(x=>x.id===id);
+  const overlay = document.getElementById('overlay');
+  const modal = document.getElementById('modal');
+  modal.innerHTML = `
+    <div class="modal-head">
+      <div><h2>${o.name}</h2><div style="color:var(--muted-2);font-size:12.5px;margin-top:4px;">Заявка #${o.id} · ${o.time}</div></div>
+      <button class="modal-close" id="closeModal">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="status-select" id="statusSelect">
+        ${STATUSES.map(s=>`<span class="status-pill ${s.key===o.status?'active':''}" data-key="${s.key}" style="${s.key===o.status?'background:'+s.color+';border-color:'+s.color:''}">${s.label}</span>`).join('')}
+      </div>
+      <div class="detail-row"><span class="k">Телефон</span><span>${o.phone}</span></div>
+      <div class="detail-row"><span class="k">Услуга</span><span>${o.service}</span></div>
+      <div class="detail-row"><span class="k">Комментарий</span><span>${o.comment || '—'}</span></div>
+      <div class="detail-row"><span class="k">Открыть в админке</span><span><a href="/admin/orders/order/${o.id}/change/" style="color:var(--accent);" target="_blank">полная карточка →</a></span></div>
+      <div class="calllog">
+        <h4>Журнал звонков</h4>
+        <div id="callLogList">
+          ${o.calls.length ? o.calls.map(c=>`<div class="calllog-item"><div class="date">${c.date}</div>${c.note}</div>`).join('') : '<div style="color:var(--muted-2);font-size:13px;">Звонков пока не было.</div>'}
+        </div>
+        <div class="calllog-add">
+          <input type="text" id="callNoteInput" placeholder="Что обсудили на звонке...">
+          <button id="addCallBtn">Добавить</button>
+        </div>
+      </div>
+    </div>
+  `;
+  overlay.classList.add('show');
+  document.getElementById('closeModal').addEventListener('click', closeModal);
+  overlay.addEventListener('click', e=>{ if(e.target===overlay) closeModal(); });
+
+  modal.querySelectorAll('.status-pill').forEach(pill=>{
+    pill.addEventListener('click', async ()=>{
+      const newStatus = pill.dataset.key;
+      try {
+        await apiFetch(`/api/orders/${o.id}/status/`, {
+          method: 'POST', body: JSON.stringify({status: newStatus})
+        });
+        o.status = newStatus;
+        renderBoard(document.getElementById('searchInput').value);
+        openModal(o.id);
+      } catch(err) { console.error(err); }
+    });
+  });
+
+  document.getElementById('addCallBtn').addEventListener('click', async ()=>{
+    const input = document.getElementById('callNoteInput');
+    const note = input.value.trim();
+    if(!note) return;
+    try {
+      const result = await apiFetch(`/api/orders/${o.id}/calls/`, {
+        method: 'POST', body: JSON.stringify({note})
+      });
+      o.calls.unshift({date: result.date, note});
+      openModal(o.id);
+    } catch(err) { console.error(err); }
+  });
+}
+
+function closeModal(){ document.getElementById('overlay').classList.remove('show'); }
+
+document.getElementById('searchInput').addEventListener('input', e=> renderBoard(e.target.value));
+
+loadOrders().catch(err=>{
+  document.getElementById('board').innerHTML = '<div class="empty-hint">Не удалось загрузить заявки. Обновите страницу.</div>';
+  console.error(err);
+});
+</script>
+{% endblock %}

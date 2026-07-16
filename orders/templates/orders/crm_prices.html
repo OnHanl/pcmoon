@@ -1,0 +1,58 @@
+{% extends "orders/crm_base.html" %}
+{% block title %}Прайс-лист{% endblock %}
+
+{% block topbar %}
+<div class="topbar">
+  <h1>Прайс-лист</h1>
+  <a href="{% url 'orders:crm_category_add' %}" class="btn" style="margin-left:auto;">+ Категория</a>
+  <a href="{% url 'orders:crm_service_add' %}" class="btn btn-accent">+ Услуга</a>
+</div>
+{% endblock %}
+
+{% block content %}
+{% if categories %}
+  {% for category in categories %}
+  <div class="cat-block crm-table-wrap">
+    <div class="cat-block-head">
+      <h3>{{ category.name }}</h3>
+      <div style="display:flex;align-items:center;gap:14px;">
+        <span class="muted-sm">порядок: {{ category.order }}</span>
+        <div class="row-actions">
+          <a href="{% url 'orders:crm_category_edit' category.id %}" class="icon-btn" title="Редактировать категорию">✎</a>
+          <button class="icon-btn danger" title="Удалить категорию" onclick="if(confirm('Удалить категорию «{{ category.name }}» и все услуги в ней?')) document.getElementById('delcat{{ category.id }}').submit();">🗑</button>
+        </div>
+      </div>
+    </div>
+    <form id="delcat{{ category.id }}" method="post" action="{% url 'orders:crm_category_delete' category.id %}" style="display:none;">{% csrf_token %}</form>
+
+    {% with services=category.services.all %}
+    {% if services %}
+    <table class="crm-table">
+      <thead><tr><th>Название</th><th>Цена</th><th>Показ на сайте</th><th></th></tr></thead>
+      <tbody>
+        {% for service in services %}
+        <tr>
+          <td>{{ service.name }}{% if service.description %}<br><span class="muted-sm" style="color:var(--muted-2);">{{ service.description }}</span>{% endif %}</td>
+          <td>{% if service.price_from %}от {% endif %}{{ service.price }} BYN</td>
+          <td>{% if service.is_active %}<span class="pill pill-on">на сайте</span>{% else %}<span class="pill pill-off">скрыта</span>{% endif %}</td>
+          <td>
+            <div class="row-actions">
+              <a href="{% url 'orders:crm_service_edit' service.id %}" class="icon-btn" title="Редактировать">✎</a>
+              <button class="icon-btn danger" title="Удалить" onclick="if(confirm('Удалить услугу «{{ service.name }}»?')) document.getElementById('delsvc{{ service.id }}').submit();">🗑</button>
+              <form id="delsvc{{ service.id }}" method="post" action="{% url 'orders:crm_service_delete' service.id %}" style="display:none;">{% csrf_token %}</form>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+      <div class="empty-hint">В этой категории пока нет услуг.</div>
+    {% endif %}
+    {% endwith %}
+  </div>
+  {% endfor %}
+{% else %}
+  <div class="crm-table-wrap"><div class="empty-hint">Категорий пока нет — начните с кнопки «+ Категория» вверху.</div></div>
+{% endif %}
+{% endblock %}

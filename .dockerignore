@@ -1,0 +1,12 @@
+venv/
+.venv/
+__pycache__/
+*.pyc
+.git/
+.gitignore
+staticfiles/
+media/
+db.sqlite3
+deploy/pcservice.env
+.env
+*.log

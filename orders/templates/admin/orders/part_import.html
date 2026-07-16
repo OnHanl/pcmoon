@@ -1,0 +1,22 @@
+{% extends "admin/base_site.html" %}
+{% block content %}
+<h1>Загрузить CSV с ценами комплектующих</h1>
+<p>
+  Скачайте текущий каталог кнопкой «Скачать текущий каталог CSV», отредактируйте цены и наличие
+  в Excel/Google Таблицах (столбцы <code>price</code> и <code>in_stock</code>), затем загрузите файл обратно.
+</p>
+<p>
+  Строки с указанным <code>id</code> обновят существующие детали. Строки без <code>id</code> (или с пустым
+  значением) создадут новые — не забудьте правильно указать <code>category_key</code>
+  (ключ категории — посмотреть можно в разделе «Категории комплектующих»).
+</p>
+<form method="post" enctype="multipart/form-data" style="margin-top:20px;">
+  {% csrf_token %}
+  <p>
+    <label for="csv_file">CSV-файл:</label><br>
+    <input type="file" name="csv_file" id="csv_file" accept=".csv" required>
+  </p>
+  <input type="submit" value="Загрузить" class="default">
+  <a href="../" class="button" style="margin-left:10px;">Отмена</a>
+</form>
+{% endblock %}

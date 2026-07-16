@@ -1,0 +1,347 @@
+{% extends "orders/base.html" %}
+{% load static %}
+
+{% block extra_head %}
+{% endblock %}
+
+{% block content %}
+
+<section class="hero" id="top">
+  <div class="wrap hero-inner">
+    <div class="hero-text reveal in">
+      <p class="eyebrow">Сборка · диагностика · ремонт</p>
+      <h1>Компьютер,<br>который<br><span class="accent">работает.</span></h1>
+      <p class="hero-lead">Собираю ПК под задачи и ремонтирую то, что перестало запускаться. Называю цену после диагностики, а не до — поэтому она не меняется в процессе.</p>
+      <div class="hero-actions">
+        <a href="#order" class="btn btn-accent">Оставить заявку</a>
+        <a href="#prices" class="btn btn-ghost">Смотреть цены</a>
+      </div>
+      <div class="hero-stats">
+<!--        <div class="hero-stat"><b>{{ done_orders_count }}+</b><span>Заявок выполнено</span></div>-->
+        <div class="hero-stat"><b>40+</b><span>Заявок выполнено</span></div>
+        <div class="hero-stat"><b>{{ avg_rating|default:"4,9" }}</b><span>Средняя оценка</span></div>
+<!--        <div class="hero-stat"><b>12&nbsp;мес</b><span>Гарантия на работы</span></div>-->
+      </div>
+    </div>
+
+    <div class="hero-panel reveal in" id="flyingPc">
+      <div class="fpc-stage" id="fpcStage">
+        <div class="fpc-glow-floor"></div>
+        <div class="fpc-float">
+          <div class="fpc-tilt" id="fpcTilt">
+            <div class="fpc-tooltip" id="fpcTooltip">⚡ Готов к любым задачам</div>
+            <div class="fpc-case">
+              <div class="fpc-rgb-strip"></div>
+              <div class="fpc-fans">
+                <div class="fpc-fan"></div>
+                <div class="fpc-fan"></div>
+              </div>
+              <div class="fpc-gpu"></div>
+              <div class="fpc-vents">
+                <div class="fpc-vent-line"></div>
+                <div class="fpc-vent-line"></div>
+                <div class="fpc-vent-line"></div>
+                <div class="fpc-vent-line"></div>
+              </div>
+              <div class="fpc-footer">
+                <span class="fpc-led"></span>
+                <span>online</span>
+              </div>
+            </div>
+            <div class="fpc-particle" style="left:30px; animation-delay:0s;"></div>
+            <div class="fpc-particle" style="left:90px; animation-delay:.9s;"></div>
+            <div class="fpc-particle" style="left:150px; animation-delay:1.8s;"></div>
+            <div class="fpc-particle" style="left:60px; animation-delay:2.4s;"></div>
+          </div>
+        </div>
+      </div>
+      <div class="fpc-hint">двигайте курсором · нажмите, чтобы разогнать</div>
+    </div>
+  </div>
+</section>
+
+<div class="trust-bar">
+  <div class="wrap trust-bar-inner">
+<!--    <div class="trust-item"><span class="trust-icon">✓</span><div><b>Гарантия до 12 мес</b><span>на работы и подбор комплектующих</span></div></div>-->
+    <div class="trust-item"><span class="trust-icon">BYN</span><div><b>Цена только после диагностики</b><span>без сюрпризов в конце</span></div></div>
+    <div class="trust-item"><span class="trust-icon">⏱</span><div><b>Ответ в течение 15 минут</b><span>в рабочее время</span></div></div>
+    <div class="trust-item"><span class="trust-icon">🔒</span><div><b>Конфиденциальность данных</b><span>с накопителей — по умолчанию</span></div></div>
+  </div>
+</div>
+
+<section class="section" id="process">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <p class="eyebrow">Как это устроено</p>
+        <h2 class="section-title">Четыре шага, без сюрпризов</h2>
+      </div>
+      <p class="section-lead">Каждый этап заявки виден мне в работе — вы всегда знаете, на какой стадии находится ваш заказ.</p>
+    </div>
+    <div class="process reveal">
+      <div class="process-step"><div class="process-num">01</div><h4>Заявка</h4><p>Оставляете заявку на сайте или пишете напрямую — я перезваниваю или отвечаю в течение 15 минут.</p></div>
+      <div class="process-step"><div class="process-num">02</div><h4>Диагностика</h4><p>Определяю причину или собираю конфигурацию. Называю точную цену — она не меняется.</p></div>
+      <div class="process-step"><div class="process-num">03</div><h4>Работа</h4><p>Собираю или ремонтирую. Держу в курсе, если что-то меняется по срокам.</p></div>
+      <div class="process-step"><div class="process-num">04</div><h4>Выдача</h4><p>Качественный результат. Полный тест на выдаче.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt" id="prices">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <p class="eyebrow">Прайс-лист</p>
+        <h2 class="section-title">Сколько это стоит</h2>
+      </div>
+      <p class="section-lead">Фиксированные цены на типовые работы. Отмеченные «от» уточняются на диагностике.</p>
+    </div>
+
+    <div class="reveal">
+      {% if categories %}
+      <div class="price-tabs" role="tablist">
+        {% for category in categories %}
+          {% with services=category.services.all %}
+          {% if services %}
+          <button class="price-tab{% if forloop.first %} active{% endif %}" data-tab="cat{{ category.id }}">{{ category.name }}</button>
+          {% endif %}
+          {% endwith %}
+        {% endfor %}
+      </div>
+
+      {% for category in categories %}
+        {% with services=category.services.all %}
+        {% if services %}
+        <div class="price-panel{% if forloop.first %} active{% endif %}" data-panel="cat{{ category.id }}">
+          {% for service in services %}
+            {% if service.is_active %}
+            <div class="price-row">
+              <div class="price-row-name">
+                {{ service.name }}
+                {% if service.description %}<span class="price-row-desc">{{ service.description }}</span>{% endif %}
+              </div>
+              <span class="price-leader"></span>
+              <div class="price-row-value">{% if service.price_from %}от {% endif %}{{ service.price|floatformat:0 }}&nbsp;BYN</div>
+            </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+      {% endfor %}
+      {% else %}
+        <p class="muted">Прайс-лист пока не заполнен — добавьте категории и услуги в админке.</p>
+      {% endif %}
+
+      <div class="price-note">💬 Не нашли нужную услугу? Опишите задачу в заявке — оценю стоимость индивидуально, бесплатно.</div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="cases">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <p class="eyebrow">Примеры работ</p>
+        <h2 class="section-title">До и после — потяните за ползунок</h2>
+      </div>
+      <p class="section-lead">Реальные кейсы: что было и что получилось. Перетащите разделитель, чтобы сравнить.</p>
+    </div>
+
+    {% if portfolio_items %}
+    <div class="compare-grid reveal">
+      {% for item in portfolio_items %}
+      <div class="compare-card">
+        {% if item.before_image and item.image %}
+        <div class="compare" data-compare>
+          <div class="layer after-layer" style="background-image:url('{{ item.image.url }}');background-size:cover;background-position:center;"></div>
+          <div class="compare-clip"><div class="layer before-layer" style="width:340px;background-image:url('{{ item.before_image.url }}');background-size:cover;background-position:center;"></div></div>
+          <div class="compare-handle"></div>
+          <span class="compare-tag tag-before">До</span>
+          <span class="compare-tag tag-after">После</span>
+        </div>
+        {% elif item.image %}
+        <div class="compare-img" style="height:220px;background-image:url('{{ item.image.url }}');background-size:cover;background-position:center;"></div>
+        {% endif %}
+        <div class="compare-body">
+          <h3>{{ item.title }}</h3>
+          {% if item.description %}<p>{{ item.description }}</p>{% endif %}
+          {% if item.tag_list %}
+          <div class="compare-meta">
+            {% for tag in item.tag_list %}<span class="chip">{{ tag }}</span>{% endfor %}
+          </div>
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+      <p class="muted">Примеры работ пока не добавлены — загрузите их в админке в разделе «Примеры работ» (фото «до» — по желанию, для слайдера сравнения).</p>
+    {% endif %}
+  </div>
+</section>
+
+<section class="section section-alt" id="reviews">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <p class="eyebrow">Отзывы</p>
+        <h2 class="section-title">Что говорят клиенты</h2>
+      </div>
+    </div>
+
+    {% if reviews %}
+    <div class="reviews-summary reveal">
+      <div>
+        <div class="rating-big">{{ avg_rating }}<span class="muted" style="font-size:20px;">/5</span></div>
+        <div class="rating-stars">★★★★★</div>
+        <div class="muted" style="font-size:13px;">на основе {{ reviews|length }} отзыв{{ reviews|length|pluralize:"а,ов" }}</div>
+      </div>
+    </div>
+
+    <div class="reviews-grid reveal">
+      {% for review in reviews %}
+      <div class="review-card">
+        <div class="review-top">
+          <div style="display:flex;gap:12px;align-items:center;">
+            <div class="review-avatar">{{ review.client_name|slice:":1" }}</div>
+            <div>
+              <div class="review-name">{{ review.client_name }}</div>
+              {% if review.is_verified %}<div class="review-verified">✓ Подтверждённый заказ</div>{% endif %}
+            </div>
+          </div>
+        </div>
+        <div class="review-stars-sm">{% for i in "12345" %}{% if forloop.counter <= review.rating %}★{% else %}☆{% endif %}{% endfor %}</div>
+        <p class="review-text">{{ review.text }}</p>
+        <div class="review-meta-row">
+          <span>{{ review.service_label|default:"—" }}</span>
+          <span>{{ review.created_at|date:"d.m.Y" }}</span>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+      <p class="muted">Отзывов пока нет — добавьте первые в админке.</p>
+    {% endif %}
+  </div>
+</section>
+
+<section class="section" id="faq">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <p class="eyebrow">Частые вопросы</p>
+        <h2 class="section-title">Прежде чем написать</h2>
+      </div>
+    </div>
+    {% if faq_items %}
+    <div class="faq-list reveal">
+      {% for item in faq_items %}
+      <div class="faq-item{% if forloop.first %} open{% endif %}">
+        <button class="faq-q">{{ item.question }}<span class="faq-icon">+</span></button>
+        <div class="faq-a"><p>{{ item.answer }}</p></div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+      <p class="muted">Вопросы пока не добавлены — заполните раздел FAQ в админке.</p>
+    {% endif %}
+  </div>
+</section>
+
+<section class="section section-alt" id="order">
+  <div class="wrap order-wrap">
+    <div class="reveal">
+      <p class="eyebrow">Заявка</p>
+      <h2 class="section-title">Оставьте заявку — перезвоню сам</h2>
+      <p class="section-lead">Опишите в двух словах, что нужно. Свяжусь, чтобы уточнить детали и назвать точную стоимость — до начала работ.</p>
+      <div class="order-guarantees">
+        <div class="guarantee-item"><span class="guarantee-icon">✓</span>Перезвоню в течение 15 минут в рабочее время</div>
+        <div class="guarantee-item"><span class="guarantee-icon">✓</span>Никакой предоплаты до согласования цены</div>
+        <div class="guarantee-item"><span class="guarantee-icon">✓</span>Ваши контакты не передаются третьим лицам</div>
+      </div>
+      {% if contact %}
+      <div class="order-contacts">
+        <div><span class="muted">Телефон:</span> {{ contact.phone }}</div>
+        {% if contact.telegram %}<div><span class="muted">Telegram:</span> {{ contact.telegram }}</div>{% endif %}
+        {% if contact.work_hours %}<div><span class="muted">Часы работы:</span> {{ contact.work_hours }}</div>{% endif %}
+      </div>
+      {% endif %}
+    </div>
+
+    <div class="order-form reveal">
+      <div class="form-progress"><span class="done"></span><span class="done"></span><span></span></div>
+      <form method="post" action="{% url 'orders:index' %}#order">
+        {% csrf_token %}
+        <div class="form-field"><label for="f-name">Имя</label>{{ form.name }}</div>
+        <div class="form-field"><label for="f-phone">Телефон</label>{{ form.phone }}</div>
+        <div class="form-field"><label for="f-service">Услуга</label>{{ form.service }}</div>
+        <div class="form-field"><label for="f-comment">Комментарий</label>{{ form.comment }}</div>
+        <button type="submit" class="btn btn-accent btn-block">Отправить заявку</button>
+        <p class="form-note">🔒 Нажимая «Отправить», вы соглашаетесь на обработку контактных данных для связи с вами по заявке.</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="contacts">
+  <div class="wrap">
+    <div class="section-head reveal"><div><p class="eyebrow">Контакты</p><h2 class="section-title">Как со мной связаться</h2></div></div>
+    {% if contact %}
+    <div class="contacts-grid reveal">
+      <div class="contact-item"><span class="contact-label">Телефон</span>{{ contact.phone }}</div>
+      {% if contact.telegram %}<div class="contact-item"><span class="contact-label">Telegram</span>{{ contact.telegram }}</div>{% endif %}
+      {% if contact.whatsapp %}<div class="contact-item"><span class="contact-label">WhatsApp</span>{{ contact.whatsapp }}</div>{% endif %}
+      {% if contact.email %}<div class="contact-item"><span class="contact-label">Email</span>{{ contact.email }}</div>{% endif %}
+      {% if contact.address %}<div class="contact-item"><span class="contact-label">Адрес</span>{{ contact.address }}</div>{% endif %}
+      {% if contact.work_hours %}<div class="contact-item"><span class="contact-label">Часы работы</span>{{ contact.work_hours }}</div>{% endif %}
+    </div>
+    {% else %}
+      <p class="muted">Контакты пока не заполнены — добавьте их в админке в разделе «Контактная информация».</p>
+    {% endif %}
+  </div>
+</section>
+
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+// ===== Летающий интерактивный ПК: наклон за курсором + реакция на клик =====
+(function(){
+  const stage = document.getElementById('fpcStage');
+  const tilt = document.getElementById('fpcTilt');
+  if(!stage || !tilt) return;
+
+  let boostTimer = null;
+
+  stage.addEventListener('mousemove', function(e){
+    const rect = stage.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;  // -0.5..0.5
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    const maxTilt = 16;
+    tilt.style.transform = `rotateY(${x * maxTilt * 2}deg) rotateX(${-y * maxTilt * 2}deg)`;
+  });
+
+  stage.addEventListener('mouseleave', function(){
+    tilt.style.transform = 'rotateY(0deg) rotateX(0deg)';
+  });
+
+  stage.addEventListener('click', function(){
+    stage.classList.add('fpc-boosted');
+    clearTimeout(boostTimer);
+    boostTimer = setTimeout(function(){
+      stage.classList.remove('fpc-boosted');
+    }, 1600);
+  });
+
+  // тач-устройства: лёгкий отклик по тапу без наведения
+  stage.addEventListener('touchstart', function(){
+    stage.classList.add('fpc-boosted');
+    clearTimeout(boostTimer);
+    boostTimer = setTimeout(function(){
+      stage.classList.remove('fpc-boosted');
+    }, 1600);
+  }, {passive:true});
+})();
+</script>
+{% endblock %}

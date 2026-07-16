@@ -1,0 +1,304 @@
+{% extends "orders/base.html" %}
+{% load static %}
+
+{% block title %}Конфигуратор сборки ПК — PC Master{% endblock %}
+
+{% block content %}
+<style>
+.cfg-intro{padding:56px 0 20px;}
+.cfg-intro h1{font-size:36px;max-width:18ch;}
+.cfg-intro p{color:var(--muted);max-width:56ch;font-size:16px;}
+.cfg-loading{padding:60px 0;text-align:center;color:var(--muted);font-family:var(--font-mono);font-size:13.5px;}
+
+.presets{display:flex;gap:12px;flex-wrap:wrap;margin:28px 0 44px;}
+.preset-card{flex:1;min-width:180px;background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:16px 18px;cursor:pointer;transition:border-color .15s, transform .15s;}
+.preset-card:hover{border-color:var(--accent);transform:translateY(-2px);}
+.preset-card h4{font-size:14.5px;margin-bottom:4px;}
+.preset-card span{font-size:12.5px;color:var(--muted-2);font-family:var(--font-mono);}
+
+.configurator{display:grid;grid-template-columns:1fr 340px;gap:36px;align-items:start;padding-bottom:100px;}
+.categories{display:flex;flex-direction:column;gap:14px;}
+
+.cat{background:var(--surface);border:1px solid var(--border-soft);border-radius:var(--radius);overflow:hidden;}
+.cat-head{display:flex;align-items:center;gap:14px;padding:18px 20px;cursor:pointer;}
+.cat-num{width:30px;height:30px;border-radius:8px;background:var(--surface-2);display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:12.5px;color:var(--muted);flex-shrink:0;}
+.cat.filled .cat-num{background:rgba(232,163,61,.14);color:var(--accent);}
+.cat-head-text{flex:1;}
+.cat-head-text h3{font-size:15.5px;margin:0;}
+.cat-selected{font-size:12.5px;color:var(--muted-2);}
+.cat.filled .cat-selected{color:var(--teal);}
+.cat-chevron{color:var(--muted-2);font-size:13px;transition:transform .2s;}
+.cat.open .cat-chevron{transform:rotate(180deg);}
+.cat-body{max-height:0;overflow:hidden;transition:max-height .3s ease;}
+.cat.open .cat-body{max-height:900px;}
+.cat-options{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px;padding:0 20px 20px;}
+.opt-card{border:1px solid var(--border);border-radius:9px;padding:14px 16px;cursor:pointer;transition:all .15s;background:var(--surface-2);position:relative;}
+.opt-card:hover{border-color:var(--accent);}
+.opt-card.selected{border-color:var(--accent);background:rgba(232,163,61,.1);}
+.opt-card.oos{opacity:.5;cursor:not-allowed;}
+.opt-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:4px;}
+.opt-name{font-size:14px;font-weight:600;}
+.opt-price{font-family:var(--font-mono);font-size:13.5px;color:var(--accent);white-space:nowrap;}
+.opt-desc{font-size:12.5px;color:var(--muted-2);}
+.opt-oos-badge{font-size:10.5px;font-family:var(--font-mono);color:var(--danger);text-transform:uppercase;margin-top:4px;display:block;}
+.opt-radio{width:16px;height:16px;border-radius:50%;border:1.5px solid var(--border);flex-shrink:0;display:inline-block;position:relative;top:1px;}
+.opt-card.selected .opt-radio{border-color:var(--accent);}
+.opt-card.selected .opt-radio::after{content:"";position:absolute;inset:3px;border-radius:50%;background:var(--accent);}
+
+.summary{position:sticky;top:90px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;box-shadow:0 30px 80px -30px rgba(0,0,0,.6);}
+.summary h3{font-size:16px;margin-bottom:4px;}
+.summary-sub{font-size:12.5px;color:var(--muted-2);margin-bottom:18px;}
+.summary-list{display:flex;flex-direction:column;gap:0;margin-bottom:6px;}
+.summary-row{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px dashed var(--border-soft);font-size:13.5px;}
+.summary-row .cat-label{color:var(--muted-2);font-size:11.5px;font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.04em;display:block;margin-bottom:2px;}
+.summary-row .val{text-align:right;flex-shrink:0;}
+.summary-row.empty{color:var(--muted-2);font-style:italic;}
+.summary-row.fixed{color:var(--teal);}
+.summary-total{display:flex;justify-content:space-between;align-items:baseline;padding:18px 0 4px;margin-top:8px;border-top:1px solid var(--border);}
+.summary-total b{font-family:var(--font-display);font-size:28px;}
+.summary-total span{font-size:12.5px;color:var(--muted-2);font-family:var(--font-mono);text-transform:uppercase;}
+.summary-note{font-size:12px;color:var(--muted-2);margin:14px 0 18px;display:flex;gap:8px;align-items:flex-start;}
+.progress-bar{height:4px;background:var(--surface-2);border-radius:2px;overflow:hidden;margin-bottom:16px;}
+.progress-bar span{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--teal));width:0%;transition:width .3s ease;}
+
+@media (max-width:960px){
+  .configurator{grid-template-columns:1fr;}
+  .summary{position:static;}
+}
+
+.overlay{position:fixed;inset:0;background:rgba(10,11,14,.6);backdrop-filter:blur(3px);display:none;align-items:center;justify-content:center;z-index:100;padding:20px;}
+.overlay.show{display:flex;}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);width:100%;max-width:480px;box-shadow:0 30px 80px -20px rgba(0,0,0,.6);}
+.modal-head{display:flex;justify-content:space-between;align-items:flex-start;padding:22px 24px;border-bottom:1px solid var(--border-soft);}
+.modal-head h2{font-size:18px;margin:0;}
+.modal-close{background:none;border:0;color:var(--muted);font-size:20px;cursor:pointer;}
+.modal-body{padding:22px 24px;}
+.modal-config-summary{background:var(--surface-2);border:1px solid var(--border-soft);border-radius:8px;padding:14px 16px;font-size:12.5px;color:var(--muted);margin-bottom:18px;max-height:140px;overflow-y:auto;}
+
+.mobile-summary{display:none;}
+@media (max-width:960px){
+  .mobile-summary{display:flex;position:fixed;bottom:0;left:0;right:0;z-index:70;background:var(--surface);border-top:1px solid var(--border);padding:12px 16px;align-items:center;gap:14px;}
+  .mobile-summary .m-total{flex:1;}
+  .mobile-summary .m-total b{display:block;font-family:var(--font-display);font-size:19px;}
+  .mobile-summary .m-total span{font-size:11px;color:var(--muted-2);}
+}
+</style>
+
+<section class="cfg-intro">
+  <div class="wrap">
+    <p class="eyebrow">Конфигуратор</p>
+    <h1>Соберите свой ПК <span class="accent">по шагам</span></h1>
+    <p>Комплектующие и цены ниже — актуальный каталог из моей админ-панели, а не зашитый в код список. Сборка и тестирование уже включены в стоимость.</p>
+    <div class="presets" id="presets"></div>
+  </div>
+</section>
+
+<div class="wrap">
+  <div id="cfgLoading" class="cfg-loading">Загружаю актуальный каталог…</div>
+  <div class="configurator" id="cfgRoot" style="display:none;">
+    <div class="categories" id="categories"></div>
+    <aside class="summary">
+      <h3>Ваша сборка</h3>
+      <div class="summary-sub" id="summarySub"></div>
+      <div class="progress-bar"><span id="progressFill"></span></div>
+      <div class="summary-list" id="summaryList"></div>
+      <div class="summary-total"><span>Итого</span><b id="summaryTotal">0 BYN</b></div>
+      <div class="summary-note">💬 Цены — из актуального каталога. Итоговая сумма подтверждается при согласовании заявки.</div>
+      <button class="btn btn-accent btn-block" id="submitBtn" disabled>Отправить как заявку</button>
+    </aside>
+  </div>
+</div>
+
+<div class="mobile-summary" id="mobileSummary" style="display:none;">
+  <div class="m-total"><b id="mobileTotal">0 BYN</b><span id="mobileSub"></span></div>
+  <button class="btn btn-accent" id="mobileSubmitBtn" disabled>Отправить</button>
+</div>
+
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <div class="modal-head">
+      <h2>Отправить конфигурацию</h2>
+      <button class="modal-close" id="closeModal" type="button">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-config-summary" id="modalConfigSummary"></div>
+      <form method="post" action="{% url 'orders:configurator' %}">
+        {% csrf_token %}
+        <input type="hidden" name="configuration_summary" id="configurationSummaryInput">
+        <div class="form-field"><label for="id_name">Имя</label>{{ form.name }}</div>
+        <div class="form-field"><label for="id_phone">Телефон</label>{{ form.phone }}</div>
+        <button type="submit" class="btn btn-accent btn-block">Отправить заявку</button>
+        <p style="font-size:11.5px;color:var(--muted-2);margin-top:12px;">🔒 Перезвоню в течение 15 минут, чтобы подтвердить наличие и сроки сборки.</p>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+const ASSEMBLY_FEE = {{ assembly_fee }};
+let CATEGORIES = [];
+let selection = {};
+
+fetch("{% url 'orders:parts_api' %}")
+  .then(r => r.json())
+  .then(data => {
+    CATEGORIES = data.categories;
+    document.getElementById('cfgLoading').style.display = 'none';
+    document.getElementById('cfgRoot').style.display = 'grid';
+    document.getElementById('mobileSummary').style.display = 'flex';
+    buildPresets();
+    renderCategories();
+    renderSummary();
+  })
+  .catch(() => {
+    document.getElementById('cfgLoading').textContent = 'Не удалось загрузить каталог. Обновите страницу или свяжитесь со мной напрямую.';
+  });
+
+function findOption(catKey, optId){
+  const cat = CATEGORIES.find(c => c.key === catKey);
+  return cat ? cat.parts.find(p => p.id === optId) : null;
+}
+
+// Пресеты считаются на лету из актуального каталога: самый дешёвый /
+// средний по цене / самый дорогой вариант в каждой категории.
+function buildPresets(){
+  const wrap = document.getElementById('presets');
+  wrap.innerHTML = '';
+  const tiers = [
+    { key: 'min', label: 'Бюджетный', icon: '💼' },
+    { key: 'mid', label: 'Средний', icon: '🎮' },
+    { key: 'max', label: 'Топовый', icon: '🚀' },
+  ];
+  tiers.forEach(tier => {
+    let total = ASSEMBLY_FEE;
+    const preset = {};
+    CATEGORIES.forEach(cat => {
+      if (!cat.parts.length) return;
+      const inStock = cat.parts.filter(p => p.in_stock);
+      const pool = inStock.length ? inStock : cat.parts;
+      const sorted = [...pool].sort((a,b) => a.price - b.price);
+      let pick;
+      if (tier.key === 'min') pick = sorted[0];
+      else if (tier.key === 'max') pick = sorted[sorted.length - 1];
+      else pick = sorted[Math.floor((sorted.length - 1) / 2)];
+      preset[cat.key] = pick.id;
+      total += pick.price;
+    });
+    const card = document.createElement('div');
+    card.className = 'preset-card';
+    card.innerHTML = `<div style="font-size:20px;margin-bottom:8px;">${tier.icon}</div><h4>${tier.label}</h4><span>от ${Math.round(total)} BYN</span>`;
+    card.addEventListener('click', () => {
+      selection = preset;
+      renderCategories();
+      renderSummary();
+      document.getElementById('categories').scrollIntoView({behavior:'smooth', block:'start'});
+    });
+    wrap.appendChild(card);
+  });
+}
+
+function renderCategories(){
+  const wrap = document.getElementById('categories');
+  wrap.innerHTML = '';
+  CATEGORIES.forEach((cat, idx) => {
+    const selectedId = selection[cat.key];
+    const selectedOpt = selectedId ? findOption(cat.key, selectedId) : null;
+    const el = document.createElement('div');
+    el.className = 'cat' + (selectedOpt ? ' filled' : '') + (idx === 0 ? ' open' : '');
+    el.innerHTML = `
+      <div class="cat-head" data-toggle="${cat.key}">
+        <div class="cat-num">${String(idx+1).padStart(2,'0')}</div>
+        <div class="cat-head-text">
+          <h3>${cat.name}${cat.is_required ? '' : ' <span style="color:var(--muted-2);font-weight:400;font-size:12px;">(необязательно)</span>'}</h3>
+          <div class="cat-selected">${selectedOpt ? selectedOpt.name + ' · ' + selectedOpt.price + ' BYN' : 'не выбрано'}</div>
+        </div>
+        <div class="cat-chevron">▾</div>
+      </div>
+      <div class="cat-body">
+        <div class="cat-options">
+          ${cat.parts.map(o => `
+            <div class="opt-card ${selectedId===o.id?'selected':''} ${!o.in_stock?'oos':''}" data-cat="${cat.key}" data-opt="${o.id}">
+              <div class="opt-top"><span class="opt-name">${o.name}</span><span class="opt-radio"></span></div>
+              <div class="opt-desc">${o.description || ''}</div>
+              <div class="opt-price">${o.price===0?'бесплатно':o.price+' BYN'}</div>
+              ${!o.in_stock ? '<span class="opt-oos-badge">нет в наличии</span>' : ''}
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `;
+    wrap.appendChild(el);
+  });
+
+  wrap.querySelectorAll('.cat-head').forEach(head => {
+    head.addEventListener('click', () => head.closest('.cat').classList.toggle('open'));
+  });
+  wrap.querySelectorAll('.opt-card:not(.oos)').forEach(card => {
+    card.addEventListener('click', () => {
+      selection[card.dataset.cat] = parseInt(card.dataset.opt);
+      renderCategories();
+      renderSummary();
+    });
+  });
+}
+
+function renderSummary(){
+  const list = document.getElementById('summaryList');
+  list.innerHTML = '';
+  let total = ASSEMBLY_FEE;
+  const requiredCats = CATEGORIES.filter(c => c.is_required);
+  let chosenRequired = 0;
+
+  CATEGORIES.forEach(cat => {
+    const optId = selection[cat.key];
+    const row = document.createElement('div');
+    if (optId) {
+      const opt = findOption(cat.key, optId);
+      total += opt.price;
+      if (cat.is_required) chosenRequired++;
+      row.className = 'summary-row';
+      row.innerHTML = `<div><span class="cat-label">${cat.name}</span>${opt.name}</div><div class="val">${opt.price} BYN</div>`;
+    } else {
+      row.className = 'summary-row empty';
+      row.innerHTML = `<div><span class="cat-label">${cat.name}</span>не выбрано</div><div class="val">—</div>`;
+    }
+    list.appendChild(row);
+  });
+
+  const assemblyRow = document.createElement('div');
+  assemblyRow.className = 'summary-row fixed';
+  assemblyRow.innerHTML = `<div><span class="cat-label">Работа мастера</span>Сборка и тестирование</div><div class="val">${ASSEMBLY_FEE} BYN</div>`;
+  list.appendChild(assemblyRow);
+
+  document.getElementById('summaryTotal').textContent = Math.round(total) + ' BYN';
+  document.getElementById('mobileTotal').textContent = Math.round(total) + ' BYN';
+  document.getElementById('summarySub').textContent = `${chosenRequired} из ${requiredCats.length} обязательных компонентов выбрано`;
+  document.getElementById('mobileSub').textContent = `${chosenRequired}/${requiredCats.length} выбрано`;
+  document.getElementById('progressFill').style.width = (requiredCats.length ? chosenRequired / requiredCats.length * 100 : 0) + '%';
+
+  const ready = chosenRequired === requiredCats.length;
+  document.getElementById('submitBtn').disabled = !ready;
+  document.getElementById('mobileSubmitBtn').disabled = !ready;
+}
+
+function buildConfigText(){
+  return CATEGORIES
+    .filter(cat => selection[cat.key])
+    .map(cat => {
+      const opt = findOption(cat.key, selection[cat.key]);
+      return `${cat.name}: ${opt.name} (${opt.price} BYN)`;
+    })
+    .join(' · ') + ` · Сборка и тестирование: ${ASSEMBLY_FEE} BYN`;
+}
+
+function openSubmitModal(){
+  document.getElementById('modalConfigSummary').textContent = buildConfigText();
+  document.getElementById('configurationSummaryInput').value = buildConfigText();
+  document.getElementById('overlay').classList.add('show');
+}
+document.getElementById('submitBtn').addEventListener('click', openSubmitModal);
+document.getElementById('mobileSubmitBtn').addEventListener('click', openSubmitModal);
+document.getElementById('closeModal').addEventListener('click', () => document.getElementById('overlay').classList.remove('show'));
+document.getElementById('overlay').addEventListener('click', e => { if (e.target.id === 'overlay') document.getElementById('overlay').classList.remove('show'); });
+</script>
+{% endblock %}

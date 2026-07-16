@@ -1,0 +1,43 @@
+{% extends "orders/crm_base.html" %}
+{% block title %}Примеры работ{% endblock %}
+
+{% block topbar %}
+<div class="topbar">
+  <h1>Примеры работ</h1>
+  <a href="{% url 'orders:crm_portfolio_add' %}" class="btn btn-accent" style="margin-left:auto;">+ Добавить работу</a>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="crm-table-wrap">
+  {% if items %}
+  <table class="crm-table">
+    <thead><tr><th>До</th><th>После</th><th>Заголовок</th><th>Дата</th><th>Публикация</th><th></th></tr></thead>
+    <tbody>
+      {% for item in items %}
+      <tr>
+        <td>
+          {% if item.before_image %}<img src="{{ item.before_image.url }}" class="crm-thumb">{% else %}<div class="crm-thumb-empty">—</div>{% endif %}
+        </td>
+        <td>
+          {% if item.image %}<img src="{{ item.image.url }}" class="crm-thumb">{% else %}<div class="crm-thumb-empty">🖼️</div>{% endif %}
+        </td>
+        <td>{{ item.title }}{% if item.tags %}<br><span style="color:var(--muted-2);font-size:12px;">{{ item.tags }}</span>{% endif %}</td>
+        <td>{{ item.date_done|date:"d.m.Y" }}</td>
+        <td>{% if item.is_published %}<span class="pill pill-on">опубликовано</span>{% else %}<span class="pill pill-off">скрыто</span>{% endif %}</td>
+        <td>
+          <div class="row-actions">
+            <a href="{% url 'orders:crm_portfolio_edit' item.id %}" class="icon-btn" title="Редактировать">✎</a>
+            <button class="icon-btn danger" title="Удалить" onclick="if(confirm('Удалить пример работы «{{ item.title }}»?')) document.getElementById('delpf{{ item.id }}').submit();">🗑</button>
+            <form id="delpf{{ item.id }}" method="post" action="{% url 'orders:crm_portfolio_delete' item.id %}" style="display:none;">{% csrf_token %}</form>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+    <div class="empty-hint">Примеров работ пока нет — добавьте первый кнопкой выше.</div>
+  {% endif %}
+</div>
+{% endblock %}

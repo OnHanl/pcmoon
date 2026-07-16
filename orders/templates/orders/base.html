@@ -1,0 +1,75 @@
+{% load static %}<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}PCMOON — сборка, ремонт и обслуживание компьютеров{% endblock %}</title>
+<meta name="description" content="Сборка ПК под задачи, диагностика и ремонт компьютеров, апгрейд и обслуживание. Прозрачный прайс, примеры работ, реальные отзывы.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% block extra_head %}{% endblock %}
+<style>
+    .logo-small {
+        width: 50px;          /* Ширина квадратика (можете поменять на 40px, 60px и т.д.) */
+        height: 50px;         /* Высота должна быть равна ширине, чтобы получился квадрат */
+        border-radius: 10px;  /* Насколько сильно закруглять углы (можно указать 50% для идеального круга) */
+        object-fit: cover;    /* ОЧЕНЬ ВАЖНО: чтобы прямоугольное фото не сплющилось, оно аккуратно обрежется под квадрат */
+    }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a href="{% url 'orders:index' %}" class="logo"><img src="{% static 'logo/logo_pc.png' %}" alt="Логотип" class="logo-small">PCMOON</a>
+    <nav class="main-nav" id="mainNav">
+      <a href="{% url 'orders:index' %}#process">Как это работает</a>
+      <a href="{% url 'orders:index' %}#prices">Прайс</a>
+      <a href="{% url 'orders:index' %}#cases">Работы</a>
+      <a href="{% url 'orders:index' %}#reviews">Отзывы</a>
+      <a href="{% url 'orders:index' %}#faq">Вопросы</a>
+    </nav>
+    <span class="header-trust"><span class="dot"></span> Отвечаю за 15 минут</span>
+    <a href="{% url 'orders:index' %}#order" class="btn btn-accent nav-cta">Оставить заявку</a>
+    <button class="burger" id="burgerBtn" aria-label="Меню"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+{% if messages %}
+<div class="wrap" style="padding-top:16px;">
+  {% for message in messages %}
+  <div class="flash-message">{{ message }}</div>
+  {% endfor %}
+</div>
+{% endif %}
+
+<main>
+  {% block content %}{% endblock %}
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <div>
+      <div class="logo"><img src="{% static 'logo/logo_pc.png' %}" alt="Логотип" class="logo-small"> PCMOON</div>
+      <p class="muted" style="margin-top:8px;">Сборка, диагностика и ремонт компьютеров.</p>
+    </div>
+    <div class="footer-copy">© {% now "Y" %} PCMOON.{% if contact %} {{ contact.phone }}{% endif %}</div>
+  </div>
+</footer>
+
+<div class="float-cta">
+  {% if contact.telegram %}<a href="https://t.me/{{ contact.telegram|cut:'@' }}" class="float-btn" title="Написать в Telegram">✈️</a>{% endif %}
+  {% if contact.whatsapp %}<a href="https://wa.me/{{ contact.whatsapp|cut:'+' }}" class="float-btn" title="Написать в WhatsApp">💬</a>{% endif %}
+  <a href="{% url 'orders:index' %}#order" class="float-btn main" title="Оставить заявку">📞</a>
+</div>
+<div class="mobile-bar">
+  {% if contact %}<a href="tel:{{ contact.phone }}" class="btn btn-ghost">Позвонить</a>{% endif %}
+  <a href="{% url 'orders:index' %}#order" class="btn btn-accent">Оставить заявку</a>
+</div>
+
+<script src="{% static 'js/main.js' %}"></script>
+{% block extra_scripts %}{% endblock %}
+</body>
+</html>

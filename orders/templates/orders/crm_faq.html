@@ -1,0 +1,37 @@
+{% extends "orders/crm_base.html" %}
+{% block title %}Вопросы FAQ{% endblock %}
+
+{% block topbar %}
+<div class="topbar">
+  <h1>Вопросы FAQ</h1>
+  <a href="{% url 'orders:crm_faq_add' %}" class="btn btn-accent" style="margin-left:auto;">+ Добавить вопрос</a>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="crm-table-wrap">
+  {% if items %}
+  <table class="crm-table">
+    <thead><tr><th>Вопрос</th><th>Порядок</th><th>Публикация</th><th></th></tr></thead>
+    <tbody>
+      {% for item in items %}
+      <tr>
+        <td>{{ item.question }}<br><span style="color:var(--muted-2);font-size:12px;">{{ item.answer|truncatechars:70 }}</span></td>
+        <td>{{ item.order }}</td>
+        <td>{% if item.is_published %}<span class="pill pill-on">опубликован</span>{% else %}<span class="pill pill-off">скрыт</span>{% endif %}</td>
+        <td>
+          <div class="row-actions">
+            <a href="{% url 'orders:crm_faq_edit' item.id %}" class="icon-btn" title="Редактировать">✎</a>
+            <button class="icon-btn danger" title="Удалить" onclick="if(confirm('Удалить вопрос?')) document.getElementById('delfaq{{ item.id }}').submit();">🗑</button>
+            <form id="delfaq{{ item.id }}" method="post" action="{% url 'orders:crm_faq_delete' item.id %}" style="display:none;">{% csrf_token %}</form>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+    <div class="empty-hint">Вопросов пока нет — добавьте первый кнопкой выше.</div>
+  {% endif %}
+</div>
+{% endblock %}
