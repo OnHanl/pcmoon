@@ -308,7 +308,7 @@
     "pk": 1,
     "fields": {
         "title": "Игровой ПК на Ryzen 5 7600 + RTX 4060",
-        "description": "Профессиональный монтаж комплектующих, аккуратный кабель-менеджмент, настройка BIOS и установка необходимого ПО. Обязательное тестирование стабильности системы и температур в стресс-тестах. Помощь в подборе оптимального «железа» под ваш бюджет",
+        "description": "Выполнена сборка мощного игрового компьютера в нестандартном корпусе с акцентом на внешний вид и эффективность охлаждения. Скрытая укладка кабелей и настройка воздушных потоков внутри корпуса. После сборки проведено тестирование стабильности работы, проверены температуры под нагрузкой и выполнена финальная настройка системы.",
         "before_image": "",
         "image": "portfolio/photo_2026-07-12_19-23-16_ztHqKZQ.jpg",
         "tags": "1440p / игры, Сборка ПК",
@@ -322,7 +322,7 @@
     "pk": 2,
     "fields": {
         "title": "Сборка ПК",
-        "description": "Выполнена полная сборка системного блока из комплектующих заказчика. Проведена проверка совместимости, аккуратная укладка кабелей и настройка воздушных потоков для оптимального охлаждения.",
+        "description": "Выполнена полная сборка системного блока. Проведена проверка совместимости, аккуратная укладка кабелей и настройка воздушных потоков для оптимального охлаждения.",
         "before_image": "portfolio/before/photo_2026-07-12_19-40-35.jpg",
         "image": "portfolio/photo_2026-07-12_19-40-22.jpg",
         "tags": "Сборка ПК, установка ОС и драйверов",
@@ -355,7 +355,7 @@
         "service_label": "Настройка",
         "is_verified": true,
         "created_at": "2025-01-16",
-        "is_published": true
+        "is_published": false
     }
 },
 {
@@ -368,7 +368,7 @@
         "service_label": "Обслуживание ноутбука",
         "is_verified": true,
         "created_at": "2026-04-10",
-        "is_published": true
+        "is_published": false
     }
 },
 {
@@ -381,7 +381,7 @@
         "service_label": "Сборка ПК",
         "is_verified": true,
         "created_at": "2026-02-12",
-        "is_published": true
+        "is_published": false
     }
 },
 {
@@ -404,65 +404,129 @@
     }
 },
 {
+    "model": "orders.order",
+    "pk": 9,
+    "fields": {
+        "name": "Вадим",
+        "phone": "+375333959136",
+        "email": "",
+        "service": null,
+        "comment": "",
+        "consent": false,
+        "consent_at": null,
+        "status": "new",
+        "priority": "medium",
+        "manager_comment": "",
+        "estimated_price": null,
+        "created_at": "2026-07-16T10:47:51.418Z",
+        "updated_at": "2026-07-16T10:47:51.418Z"
+    }
+},
+{
+    "model": "orders.order",
+    "pk": 10,
+    "fields": {
+        "name": "Вадим",
+        "phone": "+375333959136",
+        "email": "",
+        "service": null,
+        "comment": "",
+        "consent": false,
+        "consent_at": null,
+        "status": "new",
+        "priority": "medium",
+        "manager_comment": "",
+        "estimated_price": null,
+        "created_at": "2026-07-16T21:45:01.657Z",
+        "updated_at": "2026-07-16T21:45:01.657Z"
+    }
+},
+{
+    "model": "orders.order",
+    "pk": 11,
+    "fields": {
+        "name": "Вадим",
+        "phone": "+375333959136",
+        "email": "",
+        "service": null,
+        "comment": "",
+        "consent": false,
+        "consent_at": null,
+        "status": "new",
+        "priority": "medium",
+        "manager_comment": "",
+        "estimated_price": null,
+        "created_at": "2026-07-16T21:45:09.642Z",
+        "updated_at": "2026-07-16T21:45:09.642Z"
+    }
+},
+{
+    "model": "orders.order",
+    "pk": 12,
+    "fields": {
+        "name": "Вадим",
+        "phone": "+375333959136",
+        "email": "",
+        "service": null,
+        "comment": "",
+        "consent": true,
+        "consent_at": "2026-07-16T21:45:19.532Z",
+        "status": "new",
+        "priority": "medium",
+        "manager_comment": "",
+        "estimated_price": null,
+        "created_at": "2026-07-16T21:45:19.533Z",
+        "updated_at": "2026-07-16T21:45:19.533Z"
+    }
+},
+{
+    "model": "orders.order",
+    "pk": 13,
+    "fields": {
+        "name": "Вадим",
+        "phone": "+375333959136",
+        "email": "",
+        "service": null,
+        "comment": "",
+        "consent": true,
+        "consent_at": "2026-07-17T08:41:14.008Z",
+        "status": "new",
+        "priority": "medium",
+        "manager_comment": "",
+        "estimated_price": null,
+        "created_at": "2026-07-17T08:41:14.008Z",
+        "updated_at": "2026-07-17T08:41:14.008Z"
+    }
+},
+{
+    "model": "orders.order",
+    "pk": 14,
+    "fields": {
+        "name": "Вадим",
+        "phone": "+375333959136",
+        "email": "",
+        "service": 6,
+        "comment": "",
+        "consent": true,
+        "consent_at": "2026-07-17T08:41:55.092Z",
+        "status": "new",
+        "priority": "medium",
+        "manager_comment": "",
+        "estimated_price": null,
+        "created_at": "2026-07-17T08:41:55.092Z",
+        "updated_at": "2026-07-17T08:41:55.092Z"
+    }
+},
+{
     "model": "orders.contact",
     "pk": 1,
     "fields": {
-        "phone": "+375 33 310-07-12",
-        "telegram": "@LaDirector",
+        "phone": "+375 33 395-91-36",
+        "telegram": "",
         "whatsapp": "",
         "email": "pcmoonservice@gmail.com",
         "address": "Гродно, работа на выезде",
         "work_hours": "Пн–Сб, 10:00–20:00"
-    }
-},
-{
-    "model": "orders.faqitem",
-    "pk": 1,
-    "fields": {
-        "question": "Сколько стоит диагностика и входит ли она в цену ремонта?",
-        "answer": "Диагностика — 15€. Если после неё вы соглашаетесь на ремонт у меня, эта сумма вычитается из итоговой стоимости.",
-        "order": 0,
-        "is_published": true
-    }
-},
-{
-    "model": "orders.faqitem",
-    "pk": 2,
-    "fields": {
-        "question": "Что с моими личными данными на диске?",
-        "answer": "Не открываю личные файлы без необходимости. Если для ремонта нужно временно снять накопитель, он не покидает мастерскую отдельно от системного блока.",
-        "order": 1,
-        "is_published": true
-    }
-},
-{
-    "model": "orders.faqitem",
-    "pk": 3,
-    "fields": {
-        "question": "Даёте ли гарантию на ремонт и сборку?",
-        "answer": "Да, гарантия на выполненные работы — до 12 месяцев. На комплектующие действует гарантия производителя/магазина.",
-        "order": 2,
-        "is_published": true
-    }
-},
-{
-    "model": "orders.faqitem",
-    "pk": 4,
-    "fields": {
-        "question": "Можно ли привезти ПК не в Гродно?",
-        "answer": "Возможен выезд по договорённости — уточните адрес в заявке, скажу, действует ли выезд в вашем случае.",
-        "order": 3,
-        "is_published": true
-    }
-},
-{
-    "model": "orders.faqitem",
-    "pk": 5,
-    "fields": {
-        "question": "Сколько по времени занимает сборка/ремонт?",
-        "answer": "Простая сборка — обычно 1 день. Ремонт зависит от диагноза и наличия запчастей — называю срок сразу после диагностики.",
-        "order": 4,
-        "is_published": true
     }
 }
 ]
