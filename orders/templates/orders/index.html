@@ -18,9 +18,8 @@
       </div>
       <div class="hero-stats">
 <!--        <div class="hero-stat"><b>{{ done_orders_count }}+</b><span>Заявок выполнено</span></div>-->
-        <div class="hero-stat"><b>40+</b><span>Заявок выполнено</span></div>
-        <div class="hero-stat"><b>{{ avg_rating|default:"4,9" }}</b><span>Средняя оценка</span></div>
-<!--        <div class="hero-stat"><b>12&nbsp;мес</b><span>Гарантия на работы</span></div>-->
+<!--        <div class="hero-stat"><b>40+</b><span>Заявок выполнено</span></div>-->
+<!--        <div class="hero-stat"><b>{{ avg_rating|default:"4,9" }}</b><span>Средняя оценка</span></div>-->
       </div>
     </div>
 
@@ -221,7 +220,7 @@
       {% endfor %}
     </div>
     {% else %}
-      <p class="muted">Отзывов пока нет — добавьте первые в админке.</p>
+      <p class="muted">Отзывов пока нет — появятся в ближайшее время.</p>
     {% endif %}
   </div>
 </section>
@@ -244,7 +243,7 @@
       {% endfor %}
     </div>
     {% else %}
-      <p class="muted">Вопросы пока не добавлены — заполните раздел FAQ в админке.</p>
+      <p class="muted">Вопросы пока не добавлены — появятся в ближайшее время.</p>
     {% endif %}
   </div>
 </section>
@@ -254,9 +253,9 @@
     <div class="reveal">
       <p class="eyebrow">Заявка</p>
       <h2 class="section-title">Оставьте заявку — перезвоню сам</h2>
-      <p class="section-lead">Опишите в двух словах, что нужно. Свяжусь, чтобы уточнить детали и назвать точную стоимость — до начала работ.</p>
+      <p class="section-lead">Опишите в двух словах, что нужно. Свяжусь с вами, уточню детали и назову предварительную стоимость. После диагностики согласуем точную цену.</p>
       <div class="order-guarantees">
-        <div class="guarantee-item"><span class="guarantee-icon">✓</span>Перезвоню в течение 15 минут в рабочее время</div>
+        <div class="guarantee-item"><span class="guarantee-icon">✓</span>Быстро свяжусь с вами после получения заявки</div>
         <div class="guarantee-item"><span class="guarantee-icon">✓</span>Никакой предоплаты до согласования цены</div>
         <div class="guarantee-item"><span class="guarantee-icon">✓</span>Ваши контакты не передаются третьим лицам</div>
       </div>
@@ -271,14 +270,26 @@
 
     <div class="order-form reveal">
       <div class="form-progress"><span class="done"></span><span class="done"></span><span></span></div>
-      <form method="post" action="{% url 'orders:index' %}#order">
+      <div class="form-result" id="orderFormResult" hidden></div>
+      <form method="post" action="{% url 'orders:index' %}#order" id="orderForm">
         {% csrf_token %}
-        <div class="form-field"><label for="f-name">Имя</label>{{ form.name }}</div>
-        <div class="form-field"><label for="f-phone">Телефон</label>{{ form.phone }}</div>
+        <div class="form-field">
+          <label for="f-name">Имя</label>{{ form.name }}
+          <span class="field-error" data-error-for="name">{% if form.name.errors %}{{ form.name.errors.0 }}{% endif %}</span>
+        </div>
+        <div class="form-field">
+          <label for="f-phone">Телефон</label>{{ form.phone }}
+          <span class="field-error" data-error-for="phone">{% if form.phone.errors %}{{ form.phone.errors.0 }}{% endif %}</span>
+        </div>
         <div class="form-field"><label for="f-service">Услуга</label>{{ form.service }}</div>
         <div class="form-field"><label for="f-comment">Комментарий</label>{{ form.comment }}</div>
-        <button type="submit" class="btn btn-accent btn-block">Отправить заявку</button>
-        <p class="form-note">🔒 Нажимая «Отправить», вы соглашаетесь на обработку контактных данных для связи с вами по заявке.</p>
+        <label class="consent-check">
+          {{ form.consent }}
+          <span>Даю согласие на обработку персональных данных согласно <button type="button" class="policy-trigger">политике обработки персональных данных</button></span>
+        </label>
+        <span class="field-error" data-error-for="consent">{% if form.consent.errors %}{{ form.consent.errors.0 }}{% endif %}</span>
+        <button type="submit" class="btn btn-accent btn-block" id="orderSubmitBtn">Отправить заявку</button>
+        <p class="form-note">🔒 Данные используются только для связи с вами по заявке.</p>
       </form>
     </div>
   </div>
@@ -342,6 +353,71 @@
       stage.classList.remove('fpc-boosted');
     }, 1600);
   }, {passive:true});
+})();
+
+// ===== Отправка формы заявки без перезагрузки страницы =====
+(function(){
+  const form = document.getElementById('orderForm');
+  const result = document.getElementById('orderFormResult');
+  const submitBtn = document.getElementById('orderSubmitBtn');
+  if(!form || !result || !submitBtn) return;
+
+  const fieldNames = ['name', 'phone', 'service', 'comment', 'consent'];
+
+  function clearErrors(){
+    fieldNames.forEach(function(name){
+      const el = form.querySelector('[data-error-for="' + name + '"]');
+      if(el) el.textContent = '';
+    });
+  }
+
+  function showErrors(errors){
+    clearErrors();
+    Object.keys(errors).forEach(function(name){
+      const el = form.querySelector('[data-error-for="' + name + '"]');
+      if(el && errors[name] && errors[name].length){
+        el.textContent = errors[name][0].message || errors[name][0];
+      }
+    });
+  }
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Отправляю…';
+    result.hidden = true;
+    result.classList.remove('ok', 'error');
+
+    fetch(form.action, {
+      method: 'POST',
+      body: new FormData(form),
+      headers: { 'X-Requested-With': 'XMLHttpRequest' },
+    })
+    .then(function(res){ return res.json().then(function(data){ return {status: res.status, data: data}; }); })
+    .then(function(res){
+      if(res.data.ok){
+        clearErrors();
+        form.reset();
+        result.textContent = '✓ ' + res.data.message;
+        result.classList.add('ok');
+        result.hidden = false;
+      } else {
+        showErrors(res.data.errors || {});
+        result.textContent = 'Проверьте форму — есть ошибки в полях ниже.';
+        result.classList.add('error');
+        result.hidden = false;
+      }
+    })
+    .catch(function(){
+      result.textContent = 'Не получилось отправить. Попробуйте ещё раз или напишите напрямую.';
+      result.classList.add('error');
+      result.hidden = false;
+    })
+    .finally(function(){
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Отправить заявку';
+    });
+  });
 })();
 </script>
 {% endblock %}

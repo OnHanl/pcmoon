@@ -122,6 +122,9 @@ class Order(models.Model):
     )
     comment = models.TextField("Комментарий клиента", blank=True)
 
+    consent = models.BooleanField("Согласие на обработку персональных данных", default=False)
+    consent_at = models.DateTimeField("Дата согласия", null=True, blank=True)
+
     status = models.CharField(
         "Статус", max_length=20, choices=Status.choices, default=Status.NEW
     )

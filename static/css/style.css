@@ -460,3 +460,78 @@ textarea{resize:vertical;min-height:80px;}
   margin-top:8px;
   letter-spacing:.02em;
 }
+/* ===== Privacy Policy Modal ===== */
+.policy-trigger{background:none;border:0;padding:0;margin:0;font:inherit;color:var(--muted);text-decoration:underline dotted;text-underline-offset:3px;cursor:pointer;transition:color .15s;}
+.policy-trigger:hover{color:var(--accent);}
+
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(10,11,13,.72);backdrop-filter:blur(4px);z-index:200;align-items:center;justify-content:center;padding:24px;}
+.modal-overlay.open{display:flex;}
+.modal-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);max-width:640px;width:100%;max-height:82vh;overflow-y:auto;padding:32px;position:relative;box-shadow:var(--shadow-lg);}
+.modal-box h3{font-family:var(--font-display);font-size:22px;margin-bottom:18px;padding-right:32px;}
+.modal-body{color:var(--muted);font-size:14.5px;line-height:1.7;}
+.modal-body h4{color:var(--text);font-family:var(--font-body);font-size:15px;margin:18px 0 6px;}
+.modal-body p{margin:0 0 12px;}
+.modal-close{position:absolute;top:18px;right:18px;background:var(--surface-2);border:1px solid var(--border);color:var(--text);width:32px;height:32px;border-radius:8px;cursor:pointer;font-size:16px;line-height:1;display:flex;align-items:center;justify-content:center;transition:border-color .15s,color .15s;}
+.modal-close:hover{border-color:var(--accent);color:var(--accent);}
+body.modal-open{overflow:hidden;}
+
+@media (max-width:600px){
+  .modal-box{padding:24px 20px;max-height:88vh;}
+}
+
+
+/* ===== Consent checkbox in order form ===== */
+.consent-check{
+  display:flex;
+  align-items:flex-start;
+  gap:9px;
+  margin:2px 0 4px;
+  cursor:pointer;
+}
+.consent-check input[type="checkbox"]{
+  margin-top:3px;
+  width:16px;
+  height:16px;
+  flex:none;
+  accent-color:var(--accent);
+  cursor:pointer;
+}
+.consent-check span{
+  font-size:13px;
+  line-height:1.5;
+  color:var(--muted);
+}
+.consent-check .policy-trigger{
+  font-size:inherit;
+  text-decoration:underline dotted;
+  text-underline-offset:2px;
+}
+
+/* ===== Order form: inline result + field errors (AJAX submit) ===== */
+.field-error{
+  display:block;
+  min-height:0;
+  font-size:12px;
+  line-height:1.4;
+  color:#E15C5C;
+  margin-top:4px;
+}
+.field-error:empty{ display:none; }
+
+.form-result{
+  border-radius:10px;
+  padding:12px 14px;
+  font-size:14px;
+  font-weight:600;
+  margin-bottom:14px;
+}
+.form-result.ok{
+  background:rgba(74,222,128,.12);
+  border:1px solid rgba(74,222,128,.35);
+  color:#4ADE80;
+}
+.form-result.error{
+  background:rgba(225,92,92,.1);
+  border:1px solid rgba(225,92,92,.35);
+  color:#E15C5C;
+}

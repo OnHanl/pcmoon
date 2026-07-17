@@ -11,7 +11,7 @@ CRM_TEXTAREA = "cf-input cf-textarea"
 class OrderForm(forms.ModelForm):
     class Meta:
         model = Order
-        fields = ["name", "phone", "email", "service", "comment"]
+        fields = ["name", "phone", "email", "service", "comment", "consent"]
         widgets = {
             "name": forms.TextInput(attrs={
                 "class": "form-control", "id": "f-name", "placeholder": "Как к вам обращаться"
@@ -27,6 +27,7 @@ class OrderForm(forms.ModelForm):
                 "class": "form-control", "id": "f-comment", "rows": 3,
                 "placeholder": "Опишите проблему или что нужно собрать"
             }),
+            "consent": forms.CheckboxInput(attrs={"id": "f-consent", "required": True}),
         }
         labels = {
             "name": "Имя",
@@ -34,6 +35,7 @@ class OrderForm(forms.ModelForm):
             "email": "Email",
             "service": "Услуга",
             "comment": "Комментарий",
+            "consent": "Согласие на обработку персональных данных",
         }
 
     def __init__(self, *args, **kwargs):

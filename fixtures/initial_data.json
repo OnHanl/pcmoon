@@ -393,6 +393,8 @@
         "email": "",
         "service": 6,
         "comment": "",
+        "consent": false,
+        "consent_at": null,
         "status": "new",
         "priority": "medium",
         "manager_comment": "",

@@ -55,6 +55,15 @@
       <div class="logo"><img src="{% static 'logo/logo_pc.png' %}" alt="Логотип" class="logo-small"> PCMOON</div>
       <p class="muted" style="margin-top:8px;">Сборка, диагностика и ремонт компьютеров.</p>
     </div>
+    <div>
+        <pre class="muted">
+            ФИО: Амбражевич Вадим Иванович
+            УНП: HE8171854
+            Плательщик налога на профессиональный доход
+
+            <button type="button" class="policy-trigger" id="openPrivacyPolicy">Политика обработки персональных данных</button>
+        </pre>
+    </div>
     <div class="footer-copy">© {% now "Y" %} PCMOON.{% if contact %} {{ contact.phone }}{% endif %}</div>
   </div>
 </footer>
@@ -69,7 +78,62 @@
   <a href="{% url 'orders:index' %}#order" class="btn btn-accent">Оставить заявку</a>
 </div>
 
+<div class="modal-overlay" id="privacyModal">
+  <div class="modal-box">
+    <button type="button" class="modal-close" id="privacyModalClose" aria-label="Закрыть">✕</button>
+    <h3>Политика обработки персональных данных</h3>
+    <div class="modal-body">
+      <p>Настоящая политика определяет порядок обработки и защиты персональных данных пользователей сайта PCMOON, оставляющих заявку через форму на сайте.</p>
+
+      <h4>1. Какие данные собираются</h4>
+      <p>Имя, номер телефона, а также сведения об услуге и комментарий, указанные пользователем при заполнении формы заявки.</p>
+
+      <h4>2. Цель обработки</h4>
+      <p>Данные используются исключительно для связи с пользователем, уточнения деталей заказа и оказания услуг по диагностике, ремонту, сборке и обслуживанию компьютерной техники.</p>
+
+      <h4>3. Где и как хранятся данные</h4>
+      <p>Данные сохраняются в базе данных сайта и доступны только оператору (Амбражевичу В. И.) через личный кабинет учёта заявок. Данные не передаются третьим лицам, за исключением случаев, предусмотренных законодательством Республики Беларусь.</p>
+
+      <h4>4. Срок хранения</h4>
+      <p>Данные ведутся как база клиентов и используются в том числе для внутренней аналитики (учёт обращений, повторных заказов, статистики по услугам) и хранятся бессрочно, пока пользователь не отзовёт согласие или не запросит удаление.</p>
+
+      <h4>5. Согласие</h4>
+      <p>Согласие на обработку персональных данных пользователь даёт самостоятельно, отметив соответствующий пункт при отправке формы заявки на сайте.</p>
+
+      <h4>6. Права пользователя</h4>
+      <p>Пользователь вправе в любой момент отозвать согласие, а также запросить уточнение, изменение или удаление своих персональных данных, обратившись по контактам, указанным на сайте.</p>
+    </div>
+  </div>
+</div>
+
 <script src="{% static 'js/main.js' %}"></script>
+<script>
+(function(){
+  const modal = document.getElementById('privacyModal');
+  const openBtns = document.querySelectorAll('.policy-trigger');
+  const closeBtn = document.getElementById('privacyModalClose');
+  if(!modal || !openBtns.length) return;
+
+  function openModal(e){
+    if(e) e.preventDefault();
+    modal.classList.add('open');
+    document.body.classList.add('modal-open');
+  }
+  function closeModal(){
+    modal.classList.remove('open');
+    document.body.classList.remove('modal-open');
+  }
+
+  openBtns.forEach(function(btn){ btn.addEventListener('click', openModal); });
+  if(closeBtn) closeBtn.addEventListener('click', closeModal);
+  modal.addEventListener('click', function(e){
+    if(e.target === modal) closeModal();
+  });
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape' && modal.classList.contains('open')) closeModal();
+  });
+})();
+</script>
 {% block extra_scripts %}{% endblock %}
 </body>
 </html>

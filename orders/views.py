@@ -22,15 +22,22 @@ from .models import (
 # ==================== Публичный сайт ====================
 
 def index(request):
+    is_ajax = request.headers.get("X-Requested-With") == "XMLHttpRequest"
+
     if request.method == "POST":
         form = OrderForm(request.POST)
         if form.is_valid():
-            form.save()
-            messages.success(
-                request,
-                "Спасибо! Заявка принята, мы перезвоним вам в ближайшее время."
-            )
+            order = form.save(commit=False)
+            if order.consent:
+                order.consent_at = timezone.now()
+            order.save()
+            success_text = "Спасибо! Заявка принята, мы перезвоним вам в ближайшее время."
+            if is_ajax:
+                return JsonResponse({"ok": True, "message": success_text})
+            messages.success(request, success_text)
             return redirect("orders:index")
+        elif is_ajax:
+            return JsonResponse({"ok": False, "errors": form.errors}, status=400)
     else:
         form = OrderForm()
 
